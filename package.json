@@ -1,0 +1,35 @@
+{
+  "name": "phaser-starter",
+  "version": "1.0.0",
+  "description": "Typescript starter for Phaser Games",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WilliamRClark/phaser-starter.git"
+  },
+  "scripts": {
+    "start": "lite-server",
+	  "tsc": "tsc"
+  },
+  "keywords": [
+    "TypeScript",
+    "Phaser"
+  ],
+  "author": "William R Clark",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WilliamRClark/phaser-starter/issues"
+  },
+  "devDependencies": {
+    "lite-server": "^2.2.2",
+    "lodash": "~2.2.1",
+    "phaser": "2.2.2"
+  },
+  "dependencies": {
+    "typescript": "^2.0.9"
+  },
+  "homepage": "https://github.com/WilliamRClark/phaser-starter#readme"
+}
