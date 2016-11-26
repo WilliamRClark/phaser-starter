@@ -1,4 +1,4 @@
-# phaser-starter
+# phaser-ts-starter
 
 ![alt text](./src/assets/phaser.png "Phaser Icon")
 
