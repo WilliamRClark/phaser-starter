@@ -13,3 +13,18 @@ npm install
 ```
 
 The next thing we want to do is to compile the source code.  There are several ways to do this.  
+Most editors (Atom, Sublime, or VisualStudio Code) will compile on save.  
+Another alternative is to run the command line compile:
+```
+npm run tsc
+```
+
+Once the source is compiled, start the webserver.
+```
+npm start
+```
+
+## End Result
+
+You should end up with a sample app like this:
+http://htmlpreview.github.io/?https://github.com/WilliamRClark/phaser-starter/blob/master/src/index.html
