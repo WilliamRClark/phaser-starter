@@ -13,7 +13,7 @@ npm install
 ```
 
 The next thing we want to do is to compile the source code.  There are several ways to do this.  
-Most editors (Atom, Sublime, or VisualStudio Code) will compile on save.  
+Most editors ([Atom](https://atom.io/), [Sublime](https://www.sublimetext.com/), or [VisualStudio Code](https://code.visualstudio.com/)) will compile on save.  
 Another alternative is to run the command line compile:
 ```
 npm run tsc
