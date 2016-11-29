@@ -5,7 +5,10 @@
 This is a starter kit for any Phaser game.  It contains the basics you will need to work with Phaser effectively.
 
 ## Getting Started
-Yeah, the boring command line stuff.  
+Yeah, the boring command line stuff.  First clone this repo:
+```
+git clone https://github.com/WilliamRClark/phaser-ts-starter/
+```
 
 To get started you'll first want to bring in Phaser, and the rest of the JavaScript dependant files for your project. This can be easily done from the command line using [NodeJS](https://nodejs.org/en/):
 ```
