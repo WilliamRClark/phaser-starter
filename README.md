@@ -26,3 +26,7 @@ npm start
 
 ## Editing This Project
 Open the folder with your favorite editor.  You should get autocompletion, and compile on save.
+
+
+## Why TypeScript
+TypeScript has many features that make larger JavaScript projects faster to develop.  Let's be honest.  Aren't you tired of typing object.prototype?  How about real class definitions for a change.  
