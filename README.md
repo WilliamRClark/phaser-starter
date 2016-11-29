@@ -24,7 +24,5 @@ Once the source is compiled, start the webserver.
 npm start
 ```
 
-## End Result
-
-You should end up with a sample app like this:
-http://htmlpreview.github.io/?https://github.com/WilliamRClark/phaser-starter/blob/master/src/index.html
+## Editing This Project
+Open the folder with your favorite editor.  You should get autocompletion, and compile on save.
