@@ -2,6 +2,7 @@
 /// <reference path="./weapon.ts" />
     
     class Game {
+        private static instance: Game;
         private game: Phaser.Game;
         private logoSprite: Phaser.Sprite;
         private background: Phaser.TileSprite;
@@ -14,40 +15,76 @@
         private speed: number;
 
         constructor() {
-            this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'content', { init: this.init, preload: this.preload, create: this.create, update: this.update });
+            this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'content', { init: Game.init, preload: Game.preload, create: Game.create, update: Game.update });
+            Game.instance = this;
         }
 
-        init() {
-            this.game.renderer.renderSession.roundPixels = true;
+        static init() {
+            var self : Game = Game.instance;
+            self.game.renderer.renderSession.roundPixels = true;
 
-            this.game.physics.startSystem(Phaser.Physics.ARCADE);
+            self.game.physics.startSystem(Phaser.Physics.ARCADE);
         }
 
         /**
          * Load game assets.
          */
-        preload() {
-            this.game.load.image('background', 'assets/back.png');
-            this.game.load.image('foreground', 'assets/fore.png');
-            this.game.load.image('player', 'assets/ship.png');
-            this.game.load.bitmapFont('shmupfont', 'assets/shmupfont.png', 'assets/shmupfont.xml');
+        static preload() {
+            var self : Game = Game.instance;
+            self.game.load.image('background', 'assets/back.png');
+            self.game.load.image('foreground', 'assets/fore.png');
+            self.game.load.image('player', 'assets/ship.png');
+            self.game.load.bitmapFont('shmupfont', 'assets/shmupfont.png', 'assets/shmupfont.xml');
 
             for (var i = 1; i <= 11; i++)
             {
-                this.game.load.image('bullet' + i, 'assets/bullet' + i + '.png');
+                self.game.load.image('bullet' + i, 'assets/bullet' + i + '.png');
+            }
+        }
+
+        /**
+         * Game loop
+         */
+        static update() {
+            var self : Game = Game.instance;
+            self.player.body.velocity.set(0);
+
+            if (self.cursors.left.isDown)
+            {
+                self.player.body.velocity.x = -self.speed;
+            }
+            else if (self.cursors.right.isDown)
+            {
+                self.player.body.velocity.x = self.speed;
+            }
+
+            if (self.cursors.up.isDown)
+            {
+                self.player.body.velocity.y = -self.speed;
+            }
+            else if (self.cursors.down.isDown)
+            {
+                self.player.body.velocity.y = self.speed;
+            }
+
+            if (self.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
+            {
+                self.weapons[self.currentWeapon].fire(self.player);
             }
         }
 
         /**
          * Initialize our display
          */
-        create() {
-            this.background = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, 'background');
-            this.background.autoScroll(-40, 0);
-            this.speed = 300;
-            this.weapons = [];
-            this.weapons.push(new SingleBullet(this.game));
-            //this.weapons.push(new Weapon.FrontAndBack(this.game));
+        static create() {
+            var self : Game = Game.instance;
+
+            self.background = self.game.add.tileSprite(0, 0, self.game.width, self.game.height, 'background');
+            self.background.autoScroll(-40, 0);
+            self.speed = 300;
+            self.weapons = [];
+            self.weapons.push(new SingleBullet(self.game));
+            self.weapons.push(new FrontAndBack(self.game));
             //this.weapons.push(new Weapon.ThreeWay(this.game));
             //this.weapons.push(new Weapon.EightWay(this.game));
             //this.weapons.push(new Weapon.ScatterShot(this.game));
@@ -59,36 +96,37 @@
             //this.weapons.push(new Weapon.Combo1(this.game));
             //this.weapons.push(new Weapon.Combo2(this.game));
 
-            this.currentWeapon = 0;
+            self.currentWeapon = 0;
 
-            for (var i = 1; i < this.weapons.length; i++)
+            for (var i : number = 1; i < self.weapons.length; i++)
             {
-                this.weapons[i].visible = false;
+                self.weapons[i].visible = false;
             }
 
-            this.player = this.game.add.sprite(64, 200, 'player');
+            self.player = self.game.add.sprite(64, 200, 'player');
 
-            this.game.physics.arcade.enable(this.player);
+            self.game.physics.arcade.enable(self.player);
 
-            this.player.body.collideWorldBounds = true;
+            self.player.body.collideWorldBounds = true;
 
-            this.foreground = this.game.add.tileSprite(0, 0, this.game.width, this.game.height, 'foreground');
-            this.foreground.autoScroll(-60, 0);
+            self.foreground = self.game.add.tileSprite(0, 0, self.game.width, self.game.height, 'foreground');
+            self.foreground.autoScroll(-60, 0);
 
-            this.weaponName = this.game.add.bitmapText(8, 364, 'shmupfont', "ENTER = Next Weapon", 24);
+            self.weaponName = self.game.add.bitmapText(8, 364, 'shmupfont', "ENTER = Next Weapon", 24);
 
             //  Cursor keys to fly + space to fire
-            this.cursors = this.game.input.keyboard.createCursorKeys();
+            self.cursors = self.game.input.keyboard.createCursorKeys();
 
-            this.game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
+            self.game.input.keyboard.addKeyCapture([ Phaser.Keyboard.SPACEBAR ]);
 
-            var changeKey = this.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
-            changeKey.onDown.add(this.nextWeapon, this);
+            var changeKey : Phaser.Key = self.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
+            changeKey.onDown.add(self.nextWeapon, self);
 
         }
 
         nextWeapon() {
-        
+            console.log('Changing weapon.');
+
             //  Tidy-up the current weapon
             if (this.currentWeapon > 9)
             {
@@ -113,36 +151,6 @@
 
             this.weaponName.text = this.weapons[this.currentWeapon].name;
 
-        }
-
-        /**
-         * Game loop
-         */
-        update() {
-            this.player.body.velocity.set(0);
-
-            if (this.cursors.left.isDown)
-            {
-                this.player.body.velocity.x = -this.speed;
-            }
-            else if (this.cursors.right.isDown)
-            {
-                this.player.body.velocity.x = this.speed;
-            }
-
-            if (this.cursors.up.isDown)
-            {
-                this.player.body.velocity.y = -this.speed;
-            }
-            else if (this.cursors.down.isDown)
-            {
-                this.player.body.velocity.y = this.speed;
-            }
-
-            if (this.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
-            {
-                this.weapons[this.currentWeapon].fire(this.player);
-            }
         }
 
         

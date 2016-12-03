@@ -25,3 +25,27 @@ var SingleBullet = (function (_super) {
     };
     return SingleBullet;
 }(Phaser.Group));
+var FrontAndBack = (function (_super) {
+    __extends(FrontAndBack, _super);
+    function FrontAndBack(game) {
+        _super.call(this, game, game.world, 'Front And Back', false, true, Phaser.Physics.ARCADE);
+        this.nextFire = 0;
+        this.bulletSpeed = 600;
+        this.fireRate = 100;
+        for (var i = 0; i < 64; i++) {
+            this.add(new Bullet(game, 'bullet5'), true);
+        }
+    }
+    FrontAndBack.prototype.fire = function (source) {
+        if (this.game.time.time < this.nextFire) {
+            return;
+        }
+        var x = source.x + 10;
+        var y = source.y + 10;
+        this.getFirstExists(false).fire(x, y, 0, this.bulletSpeed, 0, 0);
+        this.getFirstExists(false).fire(x, y, 180, this.bulletSpeed, 0, 0);
+        this.nextFire = this.game.time.time + this.fireRate;
+    };
+    return FrontAndBack;
+}(Phaser.Group));
+;
