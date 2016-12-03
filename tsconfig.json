@@ -13,6 +13,8 @@
     ],
 	"files": [
 		"typings/index.d.ts",
-        "src/game.ts"
+        "src/game.ts",
+        "src/bullets.ts",
+        "src/weapon.ts"
 	]
 }
