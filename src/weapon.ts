@@ -4,10 +4,11 @@
         private nextFire : number;
         private bulletSpeed : number;
         private fireRate : number;
+        private sound: Phaser.Sound;
 
-        constructor(game: Phaser.Game) {
+        constructor(game: Phaser.Game, sound: Phaser.Sound) {
             super(game, game.world, 'Single Bullet', false, true, Phaser.Physics.ARCADE);
-
+            this.sound = sound;
             this.nextFire = 0;
             this.bulletSpeed = 600;
             this.fireRate = 100;
@@ -21,6 +22,8 @@
         fire(source: Phaser.Sprite) {
 
             if (this.game.time.time < this.nextFire) { return; }
+            
+            this.sound.play('l1');
 
             var x = source.x + 10;
             var y = source.y + 10;
@@ -42,7 +45,7 @@
         private nextFire : number;
         private bulletSpeed : number;
         private fireRate : number;
-        
+
         constructor(game: Phaser.Game) {
             super(game, game.world, 'Front And Back', false, true, Phaser.Physics.ARCADE);
 

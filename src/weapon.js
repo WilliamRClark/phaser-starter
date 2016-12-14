@@ -5,8 +5,9 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var SingleBullet = (function (_super) {
     __extends(SingleBullet, _super);
-    function SingleBullet(game) {
+    function SingleBullet(game, sound) {
         _super.call(this, game, game.world, 'Single Bullet', false, true, Phaser.Physics.ARCADE);
+        this.sound = sound;
         this.nextFire = 0;
         this.bulletSpeed = 600;
         this.fireRate = 100;
@@ -18,6 +19,7 @@ var SingleBullet = (function (_super) {
         if (this.game.time.time < this.nextFire) {
             return;
         }
+        this.sound.play('l1');
         var x = source.x + 10;
         var y = source.y + 10;
         this.getFirstExists(false).fire(x, y, 0, this.bulletSpeed, 0, 0);
