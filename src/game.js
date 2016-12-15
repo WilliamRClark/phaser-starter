@@ -92,12 +92,19 @@ var Game = (function () {
         self.laserAudio = self.game.add.audio("sound");
         self.laserAudio.allowMultiple = true;
         self.laserAudio.addMarker("l1", 0, 1.5);
+        self.laserAudio.addMarker("l2", 1.5, 1.5);
+        self.laserAudio.addMarker("l3", 3.5, 1.5);
+        self.laserAudio.addMarker("l4", 5.5, 1.0);
+        self.laserAudio.addMarker("l5", 7.0, 1.0);
         self.background = self.game.add.tileSprite(0, 0, self.game.width, self.game.height, 'background');
         self.background.autoScroll(-40, 0);
         self.speed = 300;
         self.weapons = [];
         self.weapons.push(new SingleBullet(self.game, self.laserAudio));
-        self.weapons.push(new FrontAndBack(self.game));
+        self.weapons.push(new FrontAndBack(self.game, self.laserAudio));
+        self.weapons.push(new ThreeWay(self.game, self.laserAudio));
+        self.weapons.push(new EightWay(self.game, self.laserAudio));
+        self.weapons.push(new ScatterShot(self.game, self.laserAudio));
         self.currentWeapon = 0;
         for (var i = 1; i < self.weapons.length; i++) {
             self.weapons[i].visible = false;

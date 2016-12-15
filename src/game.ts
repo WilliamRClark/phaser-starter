@@ -13,7 +13,7 @@
         private weaponName: Phaser.BitmapText;
         private cursors: Phaser.CursorKeys;
         private speed: number;
-        private laserAudio : Phaser.Sound
+        private laserAudio : Phaser.Sound;
 
         constructor() {
             this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'content', { init: Game.init, preload: Game.preload, create: Game.create, update: Game.update });
@@ -43,7 +43,6 @@
             }
 
             self.game.load.audio("sound", "assets/sounds/laserXSounds.mp3");
-            //self.game.load.audiosprite('lasers', ['assets/sounds/laserXSounds.mp3'], self.audioJSON );
         }
 
 
@@ -87,15 +86,20 @@
             self.laserAudio = self.game.add.audio("sound");
             self.laserAudio.allowMultiple = true;
             self.laserAudio.addMarker("l1", 0, 1.5);
+            self.laserAudio.addMarker("l2", 1.5, 1.5);
+            self.laserAudio.addMarker("l3", 3.5, 1.5);
+            self.laserAudio.addMarker("l4", 5.5, 1.0);
+            self.laserAudio.addMarker("l5", 7.0, 1.0);
 
             self.background = self.game.add.tileSprite(0, 0, self.game.width, self.game.height, 'background');
             self.background.autoScroll(-40, 0);
             self.speed = 300;
             self.weapons = [];
             self.weapons.push(new SingleBullet(self.game, self.laserAudio));
-            self.weapons.push(new FrontAndBack(self.game));
-            //this.weapons.push(new Weapon.ThreeWay(this.game));
-            //this.weapons.push(new Weapon.EightWay(this.game));
+            self.weapons.push(new FrontAndBack(self.game, self.laserAudio));
+            self.weapons.push(new ThreeWay(self.game, self.laserAudio));
+            self.weapons.push(new EightWay(self.game, self.laserAudio));
+            self.weapons.push(new ScatterShot(self.game, self.laserAudio));
             //this.weapons.push(new Weapon.ScatterShot(this.game));
             //this.weapons.push(new Weapon.Beam(this.game));
             //this.weapons.push(new Weapon.SplitShot(this.game));
