@@ -4,9 +4,9 @@
         protected nextFire : number;
         protected bulletSpeed : number;
         protected fireRate : number;
-        protected sound: Phaser.Sound;
+        protected sound: LaserSoundSprite;
 
-        constructor(game: Phaser.Game, world: Phaser.World, name: string, addToStage: boolean, enableBody: boolean, physicsBodyType: number, sound?: Phaser.Sound) {
+        constructor(game: Phaser.Game, world: Phaser.World, name: string, addToStage: boolean, enableBody: boolean, physicsBodyType: number, sound?: LaserSoundSprite) {
             super(game, world, name, addToStage, enableBody, physicsBodyType);
             this.sound = sound;
             this.nextFire = 0;
@@ -18,7 +18,7 @@
 
     class SingleBullet extends Weapon {
 
-        constructor(game: Phaser.Game, sound: Phaser.Sound) {
+        constructor(game: Phaser.Game, sound: LaserSoundSprite) {
             super(game, game.world, 'Single Bullet', false, true, Phaser.Physics.ARCADE, sound);
             this.bulletSpeed = 600;
             this.fireRate = 100;
@@ -33,7 +33,7 @@
 
             if (this.game.time.time < this.nextFire) { return; }
             
-            if (this.sound) {this.sound.play('l1')};
+            if (this.sound) {this.sound.play(LaserSoundSprite.L1)};
 
             var x = source.x + 10;
             var y = source.y + 10;
@@ -53,7 +53,7 @@
 
     class FrontAndBack extends Weapon {
 
-        constructor(game: Phaser.Game, sound: Phaser.Sound) {
+        constructor(game: Phaser.Game, sound: LaserSoundSprite) {
             super(game, game.world, 'Front And Back', false, true, Phaser.Physics.ARCADE, sound);
 
             this.bulletSpeed = 600;
@@ -69,7 +69,7 @@
 
             if (this.game.time.time < this.nextFire) { return; }
 
-            if (this.sound) {this.sound.play('l2')};
+            if (this.sound) {this.sound.play(LaserSoundSprite.L2)};
 
             var x = source.x + 10;
             var y = source.y + 10;
@@ -87,7 +87,7 @@
 
     class ThreeWay extends Weapon {
 
-        constructor(game: Phaser.Game, sound: Phaser.Sound) {
+        constructor(game: Phaser.Game, sound: LaserSoundSprite) {
             super(game, game.world, 'Three Way', false, true, Phaser.Physics.ARCADE, sound);
 
             this.bulletSpeed = 600;
@@ -102,7 +102,7 @@
         fire(source: Phaser.Sprite) {
             if (this.game.time.time < this.nextFire) { return; }
 
-            if (this.sound) {this.sound.play('l3')};
+            if (this.sound) {this.sound.play(LaserSoundSprite.L3)};
 
             var x = source.x + 10;
             var y = source.y + 10;
@@ -123,7 +123,7 @@
 
     class EightWay extends Weapon {
 
-        constructor(game: Phaser.Game, sound: Phaser.Sound) {
+        constructor(game: Phaser.Game, sound: LaserSoundSprite) {
             super(game, game.world, 'Eight Way', false, true, Phaser.Physics.ARCADE, sound);
 
             this.bulletSpeed = 600;
@@ -138,7 +138,7 @@
         fire(source: Phaser.Sprite) {
             if (this.game.time.time < this.nextFire) { return; }
 
-            if (this.sound) {this.sound.play('l4')};
+            if (this.sound) {this.sound.play(LaserSoundSprite.L4)};
 
             var x = source.x + 16;
             var y = source.y + 10;
@@ -163,7 +163,7 @@
 
     class ScatterShot extends Weapon {
 
-        constructor(game: Phaser.Game, sound: Phaser.Sound) {
+        constructor(game: Phaser.Game, sound: LaserSoundSprite) {
             super(game, game.world, 'ScatterShot', false, true, Phaser.Physics.ARCADE, sound);
 
             this.bulletSpeed = 600;
@@ -179,7 +179,7 @@
         fire(source: Phaser.Sprite) {
             if (this.game.time.time < this.nextFire) { return; }
 
-            if (this.sound) {this.sound.play('l5')};
+            if (this.sound) {this.sound.play(LaserSoundSprite.L5)};
 
             var x = source.x + 16;
             var y = (source.y + source.height / 2) + this.game.rnd.between(-10, 10);
@@ -197,7 +197,7 @@
 
     class Beam extends Weapon {
 
-        constructor(game: Phaser.Game, sound: Phaser.Sound) {
+        constructor(game: Phaser.Game, sound: LaserSoundSprite) {
             super(game, game.world, 'Beam', false, true, Phaser.Physics.ARCADE, sound);
 
             this.bulletSpeed = 1000;
@@ -212,7 +212,7 @@
         fire(source: Phaser.Sprite) {
             if (this.game.time.time < this.nextFire) { return; }
 
-            if (this.sound) {this.sound.play('l6')};
+            if (this.sound) {this.sound.play(LaserSoundSprite.L6)};
 
             var x = source.x + 40;
             var y = source.y + 10;
@@ -229,7 +229,7 @@
 
     class SplitShot extends Weapon {
 
-        constructor(game: Phaser.Game, sound: Phaser.Sound) {
+        constructor(game: Phaser.Game, sound: LaserSoundSprite) {
             super(game, game.world, 'Split Shot', false, true, Phaser.Physics.ARCADE, sound);
 
             this.bulletSpeed = 700;
@@ -245,7 +245,7 @@
         fire(source: Phaser.Sprite) {
             if (this.game.time.time < this.nextFire) { return; }
 
-            if (this.sound) {this.sound.play('l7')};
+            if (this.sound) {this.sound.play(LaserSoundSprite.L7)};
 
             var x = source.x + 20;
             var y = source.y + 10;
@@ -268,7 +268,7 @@
         private pattern : number[];
         private patternIndex : number;
 
-        constructor(game: Phaser.Game, sound: Phaser.Sound) {
+        constructor(game: Phaser.Game, sound: LaserSoundSprite) {
             super(game, game.world, 'Pattern', false, true, Phaser.Physics.ARCADE, sound);
 
             this.bulletSpeed = 600;
@@ -288,7 +288,7 @@
         fire(source: Phaser.Sprite) {
             if (this.game.time.time < this.nextFire) { return; }
 
-            if (this.sound) {this.sound.play('l8')};            
+            if (this.sound) {this.sound.play(LaserSoundSprite.L8)};            
 
             var x = source.x + 20;
             var y = source.y + 10;
@@ -313,7 +313,7 @@
 
     class Rockets extends Weapon {
 
-        constructor(game: Phaser.Game, sound: Phaser.Sound) {
+        constructor(game: Phaser.Game, sound: LaserSoundSprite) {
             super(game, game.world, 'Rockets', false, true, Phaser.Physics.ARCADE, sound);
 
             this.bulletSpeed = 400;
@@ -330,7 +330,7 @@
         fire(source: Phaser.Sprite) {
             if (this.game.time.time < this.nextFire) { return; }
 
-            if (this.sound) {this.sound.play('l9')};
+            if (this.sound) {this.sound.play(LaserSoundSprite.L9)};
 
 
             var x = source.x + 10;
@@ -349,7 +349,7 @@
 
     class ScaleBullet extends Weapon {
 
-        constructor(game: Phaser.Game, sound: Phaser.Sound) {
+        constructor(game: Phaser.Game, sound: LaserSoundSprite) {
             super(game, game.world, 'Scale Bullet', false, true, Phaser.Physics.ARCADE, sound);
 
             this.bulletSpeed = 800;
@@ -388,7 +388,7 @@
         private weapon2: Weapon;
         private name: string;
 
-        constructor(game: Phaser.Game, sound: Phaser.Sound) {
+        constructor(game: Phaser.Game, sound: LaserSoundSprite) {
 
             this.name = "Combo One";
             this.weapon1 = new SingleBullet(game, null);
@@ -426,7 +426,7 @@
         private weapon3: Weapon;
         private name: string;
 
-        constructor(game: Phaser.Game, sound: Phaser.Sound) {
+        constructor(game: Phaser.Game, sound: LaserSoundSprite) {
             this.name = "Combo Two";
             this.weapon1 = new Pattern(game, null);
             this.weapon2 = new ThreeWay(game, null);

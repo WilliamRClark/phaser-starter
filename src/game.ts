@@ -1,5 +1,6 @@
 /// <reference path="./bullets.ts" />
 /// <reference path="./weapon.ts" />
+/// <reference path="./sound.ts" />
     
     class Game {
         private static instance: Game;
@@ -13,17 +14,18 @@
         private weaponName: Phaser.BitmapText;
         private cursors: Phaser.CursorKeys;
         private speed: number;
-        private laserAudio : Phaser.Sound;
+        private laserAudio: LaserSoundSprite;
 
         constructor() {
             this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'content', { init: Game.init, preload: Game.preload, create: Game.create, update: Game.update });
+            this.laserAudio = new LaserSoundSprite(this.game);
             Game.instance = this;
         }
 
         static init() {
             var self : Game = Game.instance;
-            self.game.renderer.renderSession.roundPixels = true;
 
+            self.game.renderer.renderSession.roundPixels = true;
             self.game.physics.startSystem(Phaser.Physics.ARCADE);
         }
 
@@ -32,17 +34,17 @@
          */
         static preload() {
             var self : Game = Game.instance;
-            self.game.load.image('background', 'assets/back.png');
-            self.game.load.image('foreground', 'assets/fore.png');
-            self.game.load.image('player', 'assets/ship.png');
-            self.game.load.bitmapFont('shmupfont', 'assets/shmupfont.png', 'assets/shmupfont.xml');
+            self.game.load.image('background', 'assets/images/back.png');
+            self.game.load.image('foreground', 'assets/images/fore.png');
+            self.game.load.image('player', 'assets/images/ship.png');
+            self.game.load.bitmapFont('shmupfont', 'assets/images/shmupfont.png', 'assets/shmupfont.xml');
 
             for (var i = 1; i <= 11; i++)
             {
-                self.game.load.image('bullet' + i, 'assets/bullet' + i + '.png');
+                self.game.load.image('bullet' + i, 'assets/images/bullet' + i + '.png');
             }
 
-            self.game.load.audio("sound", "assets/sounds/laserXSounds.mp3");
+            self.laserAudio.preload();
         }
 
 
@@ -82,19 +84,9 @@
          */
         static create() {
             var self : Game = Game.instance;
-            
-            self.laserAudio = self.game.add.audio("sound");
-            self.laserAudio.allowMultiple = true;
-            self.laserAudio.addMarker("l1", 0, 1.5);
-            self.laserAudio.addMarker("l2", 1.5, 1.5);
-            self.laserAudio.addMarker("l3", 3.5, 1.5);
-            self.laserAudio.addMarker("l4", 5.5, 1.0);
-            self.laserAudio.addMarker("l5", 7.0, 1.0);
-            self.laserAudio.addMarker("l6", 9.0, 1.0);
-            self.laserAudio.addMarker("l7", 10.5, 1.0);
-            self.laserAudio.addMarker("l8", 12.0, 1.0);
-            self.laserAudio.addMarker("l9", 13.5, 1.0);
 
+            self.laserAudio.create();
+            
             self.background = self.game.add.tileSprite(0, 0, self.game.width, self.game.height, 'background');
             self.background.autoScroll(-40, 0);
             self.speed = 300;

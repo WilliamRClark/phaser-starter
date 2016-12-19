@@ -27,7 +27,7 @@ var SingleBullet = (function (_super) {
             return;
         }
         if (this.sound) {
-            this.sound.play('l1');
+            this.sound.play(LaserSoundSprite.L1);
         }
         ;
         var x = source.x + 10;
@@ -52,7 +52,7 @@ var FrontAndBack = (function (_super) {
             return;
         }
         if (this.sound) {
-            this.sound.play('l2');
+            this.sound.play(LaserSoundSprite.L2);
         }
         ;
         var x = source.x + 10;
@@ -79,7 +79,7 @@ var ThreeWay = (function (_super) {
             return;
         }
         if (this.sound) {
-            this.sound.play('l3');
+            this.sound.play(LaserSoundSprite.L3);
         }
         ;
         var x = source.x + 10;
@@ -107,7 +107,7 @@ var EightWay = (function (_super) {
             return;
         }
         if (this.sound) {
-            this.sound.play('l4');
+            this.sound.play(LaserSoundSprite.L4);
         }
         ;
         var x = source.x + 16;
@@ -140,7 +140,7 @@ var ScatterShot = (function (_super) {
             return;
         }
         if (this.sound) {
-            this.sound.play('l5');
+            this.sound.play(LaserSoundSprite.L5);
         }
         ;
         var x = source.x + 16;
@@ -167,7 +167,7 @@ var Beam = (function (_super) {
             return;
         }
         if (this.sound) {
-            this.sound.play('l6');
+            this.sound.play(LaserSoundSprite.L6);
         }
         ;
         var x = source.x + 40;
@@ -193,7 +193,7 @@ var SplitShot = (function (_super) {
             return;
         }
         if (this.sound) {
-            this.sound.play('l7');
+            this.sound.play(LaserSoundSprite.L7);
         }
         ;
         var x = source.x + 20;
@@ -224,7 +224,7 @@ var Pattern = (function (_super) {
             return;
         }
         if (this.sound) {
-            this.sound.play('l8');
+            this.sound.play(LaserSoundSprite.L8);
         }
         ;
         var x = source.x + 20;
@@ -255,7 +255,7 @@ var Rockets = (function (_super) {
             return;
         }
         if (this.sound) {
-            this.sound.play('l9');
+            this.sound.play(LaserSoundSprite.L9);
         }
         ;
         var x = source.x + 10;

@@ -50,6 +50,7 @@ var Game = (function () {
             }
         };
         this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'content', { init: Game.init, preload: Game.preload, create: Game.create, update: Game.update });
+        this.laserAudio = new LaserSoundSprite(this.game);
         Game.instance = this;
     }
     Game.init = function () {
@@ -59,14 +60,14 @@ var Game = (function () {
     };
     Game.preload = function () {
         var self = Game.instance;
-        self.game.load.image('background', 'assets/back.png');
-        self.game.load.image('foreground', 'assets/fore.png');
-        self.game.load.image('player', 'assets/ship.png');
-        self.game.load.bitmapFont('shmupfont', 'assets/shmupfont.png', 'assets/shmupfont.xml');
+        self.game.load.image('background', 'assets/images/back.png');
+        self.game.load.image('foreground', 'assets/images/fore.png');
+        self.game.load.image('player', 'assets/images/ship.png');
+        self.game.load.bitmapFont('shmupfont', 'assets/images/shmupfont.png', 'assets/shmupfont.xml');
         for (var i = 1; i <= 11; i++) {
-            self.game.load.image('bullet' + i, 'assets/bullet' + i + '.png');
+            self.game.load.image('bullet' + i, 'assets/images/bullet' + i + '.png');
         }
-        self.game.load.audio("sound", "assets/sounds/laserXSounds.mp3");
+        self.laserAudio.preload();
     };
     Game.update = function () {
         var self = Game.instance;
@@ -89,17 +90,7 @@ var Game = (function () {
     };
     Game.create = function () {
         var self = Game.instance;
-        self.laserAudio = self.game.add.audio("sound");
-        self.laserAudio.allowMultiple = true;
-        self.laserAudio.addMarker("l1", 0, 1.5);
-        self.laserAudio.addMarker("l2", 1.5, 1.5);
-        self.laserAudio.addMarker("l3", 3.5, 1.5);
-        self.laserAudio.addMarker("l4", 5.5, 1.0);
-        self.laserAudio.addMarker("l5", 7.0, 1.0);
-        self.laserAudio.addMarker("l6", 9.0, 1.0);
-        self.laserAudio.addMarker("l7", 10.5, 1.0);
-        self.laserAudio.addMarker("l8", 12.0, 1.0);
-        self.laserAudio.addMarker("l9", 13.5, 1.0);
+        self.laserAudio.create();
         self.background = self.game.add.tileSprite(0, 0, self.game.width, self.game.height, 'background');
         self.background.autoScroll(-40, 0);
         self.speed = 300;
