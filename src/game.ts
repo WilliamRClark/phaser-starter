@@ -90,6 +90,10 @@
             self.laserAudio.addMarker("l3", 3.5, 1.5);
             self.laserAudio.addMarker("l4", 5.5, 1.0);
             self.laserAudio.addMarker("l5", 7.0, 1.0);
+            self.laserAudio.addMarker("l6", 9.0, 1.0);
+            self.laserAudio.addMarker("l7", 10.5, 1.0);
+            self.laserAudio.addMarker("l8", 12.0, 1.0);
+            self.laserAudio.addMarker("l9", 13.5, 1.0);
 
             self.background = self.game.add.tileSprite(0, 0, self.game.width, self.game.height, 'background');
             self.background.autoScroll(-40, 0);
@@ -100,14 +104,13 @@
             self.weapons.push(new ThreeWay(self.game, self.laserAudio));
             self.weapons.push(new EightWay(self.game, self.laserAudio));
             self.weapons.push(new ScatterShot(self.game, self.laserAudio));
-            //this.weapons.push(new Weapon.ScatterShot(this.game));
-            //this.weapons.push(new Weapon.Beam(this.game));
-            //this.weapons.push(new Weapon.SplitShot(this.game));
-            //this.weapons.push(new Weapon.Pattern(this.game));
-            //this.weapons.push(new Weapon.Rockets(this.game));
-            //this.weapons.push(new Weapon.ScaleBullet(this.game));
-            //this.weapons.push(new Weapon.Combo1(this.game));
-            //this.weapons.push(new Weapon.Combo2(this.game));
+            self.weapons.push(new Beam(self.game, self.laserAudio));
+            self.weapons.push(new SplitShot(self.game, self.laserAudio));
+            self.weapons.push(new Pattern(self.game, self.laserAudio));
+            self.weapons.push(new Rockets(self.game, self.laserAudio));
+            self.weapons.push(new ScaleBullet(self.game, self.laserAudio));
+            self.weapons.push(new Combo1(self.game, self.laserAudio));
+            self.weapons.push(new Combo2(self.game, self.laserAudio));
 
             self.currentWeapon = 0;
 
