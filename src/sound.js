@@ -1,7 +1,19 @@
-var LaserSoundSprite = (function () {
-    function LaserSoundSprite(game) {
-        this.soundRef = "laserSound";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+var SoundSprite = (function () {
+    function SoundSprite(game, soundRef) {
         this.game = game;
+        this.soundRef = soundRef;
+    }
+    return SoundSprite;
+}());
+var LaserSoundSprite = (function (_super) {
+    __extends(LaserSoundSprite, _super);
+    function LaserSoundSprite(game) {
+        _super.call(this, game, "laserSound");
     }
     LaserSoundSprite.prototype.preload = function () {
         this.game.load.audio(this.soundRef, "assets/sounds/laserXSounds.mp3");
@@ -32,4 +44,40 @@ var LaserSoundSprite = (function () {
     LaserSoundSprite.L8 = "l8";
     LaserSoundSprite.L9 = "l9";
     return LaserSoundSprite;
-}());
+}(SoundSprite));
+;
+var EffectsSoundSprite = (function (_super) {
+    __extends(EffectsSoundSprite, _super);
+    function EffectsSoundSprite(game) {
+        _super.call(this, game, "effects");
+    }
+    EffectsSoundSprite.prototype.preload = function () {
+        this.game.load.audio(this.soundRef, "assets/sounds/fx_mixdown.ogg");
+    };
+    EffectsSoundSprite.prototype.create = function () {
+        this.effectAudio = this.game.add.audio(this.soundRef);
+        this.effectAudio.allowMultiple = true;
+        this.effectAudio.addMarker(EffectsSoundSprite.ALIEN_DEATH, 1, 1.0);
+        this.effectAudio.addMarker(EffectsSoundSprite.BOSS_HIT, 3, 0.5);
+        this.effectAudio.addMarker(EffectsSoundSprite.ESCAPE, 4, 3.2);
+        this.effectAudio.addMarker(EffectsSoundSprite.MEOW, 8, 0.5);
+        this.effectAudio.addMarker(EffectsSoundSprite.NUMKEY, 9, 0.1);
+        this.effectAudio.addMarker(EffectsSoundSprite.PING, 10, 1.0);
+        this.effectAudio.addMarker(EffectsSoundSprite.DEATH, 12, 4.2);
+        this.effectAudio.addMarker(EffectsSoundSprite.SHOT, 17, 1.0);
+        this.effectAudio.addMarker(EffectsSoundSprite.SQUIT, 19, 0.3);
+    };
+    EffectsSoundSprite.prototype.play = function (soundRef) {
+        this.effectAudio.play(soundRef);
+    };
+    EffectsSoundSprite.ALIEN_DEATH = "alien death";
+    EffectsSoundSprite.BOSS_HIT = "boss hit";
+    EffectsSoundSprite.ESCAPE = "escape";
+    EffectsSoundSprite.MEOW = "meow";
+    EffectsSoundSprite.NUMKEY = "numkey";
+    EffectsSoundSprite.PING = "ping";
+    EffectsSoundSprite.DEATH = "death";
+    EffectsSoundSprite.SHOT = "shot";
+    EffectsSoundSprite.SQUIT = "squit";
+    return EffectsSoundSprite;
+}(SoundSprite));

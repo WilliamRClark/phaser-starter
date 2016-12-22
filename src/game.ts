@@ -3,26 +3,49 @@
 /// <reference path="./sound.ts" />
     
     class Game {
+        /**
+         * Global game and settings
+         */
         private static instance: Game;
+
+        /**
+         * Phaser game instance
+         */
         private game: Phaser.Game;
+
         private logoSprite: Phaser.Sprite;
         private background: Phaser.TileSprite;
         private foreground: Phaser.TileSprite;
         private weapons: any[];
         private currentWeapon: number;
         private player: Phaser.Sprite;
+        private alien: Phaser.Sprite;
+
         private weaponName: Phaser.BitmapText;
         private cursors: Phaser.CursorKeys;
         private speed: number;
+        private explosions : Phaser.Group;
+
+
+        /**
+         * Laser sound effects audio sprite sheet
+         */
         private laserAudio: LaserSoundSprite;
+
+        /**
+         * Generic sound effects audio sprite sheet
+         */
+        private effectAudio: EffectsSoundSprite;
 
         constructor() {
             this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'content', { init: Game.init, preload: Game.preload, create: Game.create, update: Game.update });
             this.laserAudio = new LaserSoundSprite(this.game);
+            this.effectAudio = new EffectsSoundSprite(this.game);
             Game.instance = this;
         }
 
         static init() {
+            console.log("Phaser init()");
             var self : Game = Game.instance;
 
             self.game.renderer.renderSession.roundPixels = true;
@@ -33,60 +56,46 @@
          * Load game assets.
          */
         static preload() {
+            console.log("Phaser preload()");
             var self : Game = Game.instance;
+
+            // Image assets
             self.game.load.image('background', 'assets/images/back.png');
             self.game.load.image('foreground', 'assets/images/fore.png');
             self.game.load.image('player', 'assets/images/ship.png');
-            self.game.load.bitmapFont('shmupfont', 'assets/images/shmupfont.png', 'assets/shmupfont.xml');
+            self.game.load.spritesheet('kaboom', 'assets/images/explode.png', 128, 128);
+            self.game.load.spritesheet('alien', 'assets/images/invader32x32x4.png', 32, 32);
 
             for (var i = 1; i <= 11; i++)
             {
                 self.game.load.image('bullet' + i, 'assets/images/bullet' + i + '.png');
             }
 
+            // Font assets
+            self.game.load.bitmapFont('shmupfont', 'assets/images/shmupfont.png', 'assets/shmupfont.xml');
+
+            // Audio assets
             self.laserAudio.preload();
-        }
+            self.effectAudio.preload();
 
+            //  An explosion pool
+            self.explosions = self.game.add.group();
+            self.explosions.createMultiple(30, 'kaboom');
 
-        /**
-         * Game loop
-         */
-        static update() {
-            var self : Game = Game.instance;
-            self.player.body.velocity.set(0);
-
-            if (self.cursors.left.isDown)
-            {
-                self.player.body.velocity.x = -self.speed;
-            }
-            else if (self.cursors.right.isDown)
-            {
-                self.player.body.velocity.x = self.speed;
-            }
-
-            if (self.cursors.up.isDown)
-            {
-                self.player.body.velocity.y = -self.speed;
-            }
-            else if (self.cursors.down.isDown)
-            {
-                self.player.body.velocity.y = self.speed;
-            }
-
-            if (self.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
-            {
-                self.weapons[self.currentWeapon].fire(self.player);
-            }
         }
 
         /**
          * Initialize our display and audio
          */
         static create() {
+            console.log("Phaser create()");
             var self : Game = Game.instance;
 
             self.laserAudio.create();
+            self.effectAudio.create();
             
+            self.game.load.spritesheet('kaboom', 'assets/images/explode.png', 128, 128);
+
             self.background = self.game.add.tileSprite(0, 0, self.game.width, self.game.height, 'background');
             self.background.autoScroll(-40, 0);
             self.speed = 300;
@@ -112,8 +121,15 @@
             }
 
             self.player = self.game.add.sprite(64, 200, 'player');
+            self.player.animations.add('kaboom');
+
+            self.alien = self.game.add.sprite(200, 200, 'alien');
+            self.alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
+            self.alien.animations.play('fly');
+
 
             self.game.physics.arcade.enable(self.player);
+            self.game.physics.arcade.enable(self.alien);
 
             self.player.body.collideWorldBounds = true;
 
@@ -130,6 +146,44 @@
             var changeKey : Phaser.Key = self.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
             changeKey.onDown.add(self.nextWeapon, self);
 
+        }
+
+
+        /**
+         * Game loop
+         */
+        static update() {
+            var self : Game = Game.instance;
+            self.player.body.velocity.set(0);
+
+            // Process keyboard
+            if (self.cursors.left.isDown)
+            {
+                self.player.body.velocity.x = -self.speed;
+            }
+            else if (self.cursors.right.isDown)
+            {
+                self.player.body.velocity.x = self.speed;
+            }
+
+            if (self.cursors.up.isDown)
+            {
+                self.player.body.velocity.y = -self.speed;
+            }
+            else if (self.cursors.down.isDown)
+            {
+                self.player.body.velocity.y = self.speed;
+            }
+
+            if (self.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
+            {
+                self.weapons[self.currentWeapon].fire(self.player);
+            }
+
+            //  Run collision detection
+            if (self.game.physics.arcade.collide(self.alien, self.player)) {
+                Game.playerHitsAlien(self.alien, self.player);
+            }
         }
 
         nextWeapon() {
@@ -161,56 +215,23 @@
 
         }
 
-        private audioJSON: any = {
-            spritemap: {
-                "alien death": {
-                    start: 1,
-                    end: 2,
-                    loop: false
-                },
-                "boss hit": {
-                    start: 3,
-                    end: 3.5,
-                    loop: false
-                },
-                "escape": {
-                    start: 4,
-                    end: 7.2,
-                    loop: false
-                },
-                "meow": {
-                    start: 8,
-                    end: 8.5,
-                    loop: false
-                },
-                "numkey": {
-                    start: 9,
-                    end: 9.1,
-                    loop: false
-                },
-                "ping": {
-                    start: 10,
-                    end: 11,
-                    loop: false
-                },
-                "death": {
-                    start: 12,
-                    end: 16.2,
-                    loop: false
-                },
-                "shot": {
-                    start: 17,
-                    end: 18,
-                    loop: false
-                },
-                "squit": {
-                    start: 19,
-                    end: 19.3,
-                    loop: false
-                }
-            }
-        };
-        
+        static playerHitsAlien(player: Phaser.Sprite, alien: Phaser.Sprite) {
+            var self : Game = Game.instance;
+
+            console.log("Player hits alien");
+            player.kill();            
+            alien.kill();
+
+            // Play death animation
+            var fireyDeath : Phaser.Sprite = self.game.add.sprite(player.body.x, player.body.y,"kaboom");
+            fireyDeath.anchor.setTo(0.5, 0.5);
+            fireyDeath.animations.add('boom');
+            fireyDeath.play('boom', 15, false, true);
+
+            // Make dying sounds
+            self.effectAudio.play(EffectsSoundSprite.DEATH);
+            
+        }
 
     }
 
