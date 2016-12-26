@@ -1,7 +1,4 @@
 # phaser-ts-starter
-
-![alt text](./src/assets/phaser.png "Phaser Icon")
-
 This is a starter kit for any Phaser game.  It contains the basics you will need to work with Phaser effectively.
 
 ## Getting Started
@@ -27,4 +24,6 @@ npm start
 ## End Result
 
 You should end up with a sample app like this:
-http://htmlpreview.github.io/?https://github.com/WilliamRClark/phaser-starter/blob/master/src/index.html
+
+![alt text](./doc/ShooterScreenShot.png "Game Screen Shot")
+

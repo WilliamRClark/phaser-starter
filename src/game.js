@@ -1,6 +1,6 @@
 var Game = (function () {
     function Game() {
-        this.game = new Phaser.Game(800, 600, Phaser.AUTO, 'content', { init: Game.init, preload: Game.preload, create: Game.create, update: Game.update });
+        this.game = new Phaser.Game(1280, 1024, Phaser.AUTO, 'content', { init: Game.init, preload: Game.preload, create: Game.create, update: Game.update });
         this.laserAudio = new LaserSoundSprite(this.game);
         this.effectAudio = new EffectsSoundSprite(this.game);
         Game.instance = this;
@@ -56,7 +56,7 @@ var Game = (function () {
         }
         self.player = self.game.add.sprite(64, 200, 'player');
         self.player.animations.add('kaboom');
-        self.alien = self.game.add.sprite(200, 200, 'alien');
+        self.alien = self.game.add.sprite(600, 200, 'alien');
         self.alien.animations.add('fly', [0, 1, 2, 3], 20, true);
         self.alien.animations.play('fly');
         self.game.physics.arcade.enable(self.player);
