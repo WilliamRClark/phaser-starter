@@ -1,5 +1,6 @@
-# phaser-ts-starter
-This is a starter kit for any Phaser game.  It contains the basics you will need to work with Phaser effectively.
+# Shooter
+This is the start of a classic R-Type shooter game.  Most of the code and assets are from the [Phaser Shoot'em Up in Tutorial](https://phaser.io/tutorials/coding-tips-007) converted into TypeScipt.
+
 
 ## Getting Started
 Yeah, the boring command line stuff.  
