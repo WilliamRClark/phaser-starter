@@ -64,7 +64,7 @@ var Game = (function () {
         self.player.body.collideWorldBounds = true;
         self.foreground = self.game.add.tileSprite(0, 0, self.game.width, self.game.height, 'foreground');
         self.foreground.autoScroll(-60, 0);
-        self.weaponName = self.game.add.bitmapText(8, 364, 'shmupfont', "ENTER = Next Weapon", 24);
+        self.weaponName = self.game.add.bitmapText(8, 900, 'shmupfont', "ENTER = Next Weapon", 24);
         self.cursors = self.game.input.keyboard.createCursorKeys();
         self.game.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
         var changeKey = self.game.input.keyboard.addKey(Phaser.Keyboard.ENTER);
@@ -91,6 +91,9 @@ var Game = (function () {
         if (self.game.physics.arcade.collide(self.alien, self.player)) {
             Game.playerHitsAlien(self.alien, self.player);
         }
+        self.game.physics.arcade.collide(self.weapons[self.currentWeapon], self.alien, function (bullet, alien) {
+            self.bulletHitsAlien(bullet, alien);
+        });
     };
     Game.prototype.nextWeapon = function () {
         console.log('Changing weapon.');
@@ -109,12 +112,23 @@ var Game = (function () {
         this.weapons[this.currentWeapon].visible = true;
         this.weaponName.text = this.weapons[this.currentWeapon].name;
     };
+    Game.prototype.bulletHitsAlien = function (bullet, alien) {
+        var self = Game.instance;
+        console.log("Bullet hits alien");
+        bullet.kill();
+        alien.kill();
+        Game.fireyDeath(alien);
+    };
     Game.playerHitsAlien = function (player, alien) {
         var self = Game.instance;
         console.log("Player hits alien");
         player.kill();
         alien.kill();
-        var fireyDeath = self.game.add.sprite(player.body.x, player.body.y, "kaboom");
+        Game.fireyDeath(player);
+    };
+    Game.fireyDeath = function (dyingSprite) {
+        var self = Game.instance;
+        var fireyDeath = self.game.add.sprite(dyingSprite.body.x, dyingSprite.body.y, "kaboom");
         fireyDeath.anchor.setTo(0.5, 0.5);
         fireyDeath.animations.add('boom');
         fireyDeath.play('boom', 15, false, true);

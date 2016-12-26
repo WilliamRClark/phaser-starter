@@ -133,10 +133,11 @@
 
             self.player.body.collideWorldBounds = true;
 
+            // Set up our foreground image.
             self.foreground = self.game.add.tileSprite(0, 0, self.game.width, self.game.height, 'foreground');
             self.foreground.autoScroll(-60, 0);
 
-            self.weaponName = self.game.add.bitmapText(8, 364, 'shmupfont', "ENTER = Next Weapon", 24);
+            self.weaponName = self.game.add.bitmapText(8, 900, 'shmupfont', "ENTER = Next Weapon", 24);
 
             //  Cursor keys to fly + space to fire
             self.cursors = self.game.input.keyboard.createCursorKeys();
@@ -184,8 +185,19 @@
             if (self.game.physics.arcade.collide(self.alien, self.player)) {
                 Game.playerHitsAlien(self.alien, self.player);
             }
+
+            self.game.physics.arcade.collide(
+                self.weapons[self.currentWeapon], 
+                self.alien, 
+                function(bullet: Phaser.Sprite, alien: Phaser.Sprite) {
+                    self.bulletHitsAlien(bullet, alien);
+                } 
+            );
         }
 
+        /**
+         * Change the active weapon used by the player.
+         */
         nextWeapon() {
             console.log('Changing weapon.');
 
@@ -215,6 +227,23 @@
 
         }
 
+        /**
+         * Handler for bullet hitting alien.  Kill alien, and make explosion
+         * 
+         * @param bullet: Phaser sprite for bullet
+         * @param alien: Phaser sprite for alien
+         * 
+         */
+        public bulletHitsAlien(bullet: Phaser.Sprite, alien: Phaser.Sprite) {
+            var self : Game = Game.instance;
+
+            console.log("Bullet hits alien");
+            bullet.kill();            
+            alien.kill();
+
+            Game.fireyDeath(alien);
+        }
+
         static playerHitsAlien(player: Phaser.Sprite, alien: Phaser.Sprite) {
             var self : Game = Game.instance;
 
@@ -222,17 +251,21 @@
             player.kill();            
             alien.kill();
 
+            Game.fireyDeath(player);
+        }
+
+        static fireyDeath(dyingSprite: Phaser.Sprite) {
+            var self : Game = Game.instance;
+
             // Play death animation
-            var fireyDeath : Phaser.Sprite = self.game.add.sprite(player.body.x, player.body.y,"kaboom");
+            var fireyDeath : Phaser.Sprite = self.game.add.sprite(dyingSprite.body.x, dyingSprite.body.y,"kaboom");
             fireyDeath.anchor.setTo(0.5, 0.5);
             fireyDeath.animations.add('boom');
             fireyDeath.play('boom', 15, false, true);
 
             // Make dying sounds
-            self.effectAudio.play(EffectsSoundSprite.DEATH);
-            
+            self.effectAudio.play(EffectsSoundSprite.DEATH);            
         }
-
     }
 
     window.onload = () => {
