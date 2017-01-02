@@ -19,7 +19,7 @@
         private weapons: any[];
         private currentWeapon: number;
         private player: Phaser.Sprite;
-        private alien: Phaser.Sprite;
+        private aliens: Phaser.Group;
 
         private weaponName: Phaser.BitmapText;
         private cursors: Phaser.CursorKeys;
@@ -122,16 +122,20 @@
 
             self.player = self.game.add.sprite(64, 200, 'player');
             self.player.animations.add('kaboom');
-
-            self.alien = self.game.add.sprite(600, 200, 'alien');
-            self.alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
-            self.alien.animations.play('fly');
-
-
             self.game.physics.arcade.enable(self.player);
-            self.game.physics.arcade.enable(self.alien);
-
             self.player.body.collideWorldBounds = true;
+
+            self.aliens = self.game.add.group();
+            self.aliens.create(600, 200, 'alien');
+            self.aliens.create(800, 400, 'alien');
+            self.aliens.create(600, 600, 'alien');
+
+            self.aliens.forEach(function(alien: Phaser.Sprite) {
+                alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
+                alien.animations.play('fly');
+                self.game.physics.arcade.enable(alien);
+            }, self);
+
 
             // Set up our foreground image.
             self.foreground = self.game.add.tileSprite(0, 0, self.game.width, self.game.height, 'foreground');
@@ -182,17 +186,46 @@
             }
 
             //  Run collision detection
-            if (self.game.physics.arcade.collide(self.alien, self.player)) {
-                Game.playerHitsAlien(self.alien, self.player);
-            }
+            self.game.physics.arcade.collide(
+                self.aliens, 
+                self.player, 
+                function(alien: Phaser.Sprite, player: Phaser.Sprite){
+                    Game.playerHitsAlien(alien, player);
+                }
+            ); 
+
 
             self.game.physics.arcade.collide(
                 self.weapons[self.currentWeapon], 
-                self.alien, 
+                self.aliens, 
                 function(bullet: Phaser.Sprite, alien: Phaser.Sprite) {
                     self.bulletHitsAlien(bullet, alien);
                 } 
             );
+
+            self.moveAliens();
+        }
+
+        private movingUp : boolean = false;
+        private yLowerBound : number = 100;
+        private yUpperBound : number = 800;
+
+        moveAliens() {
+            var self : Game = Game.instance;
+            self.aliens.forEach(function(alien: Phaser.Group) {
+                if (self.movingUp) {
+                    alien.y += 2;
+                    if (alien.y > self.yUpperBound) {
+                        self.movingUp = false;
+                    }
+                } else {
+                    alien.y -= 2;
+                    if (alien.y < self.yLowerBound) {
+                        self.movingUp = true;
+                    }
+                }
+            }, self);
+
         }
 
         /**
@@ -264,7 +297,7 @@
             fireyDeath.play('boom', 15, false, true);
 
             // Make dying sounds
-            self.effectAudio.play(EffectsSoundSprite.DEATH);            
+            self.effectAudio.play(EffectsSoundSprite.ALIEN_DEATH);            
         }
     }
 

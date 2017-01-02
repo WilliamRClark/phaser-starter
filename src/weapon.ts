@@ -31,7 +31,8 @@
 
         fire(source: Phaser.Sprite) {
 
-            if (this.game.time.time < this.nextFire) { return; }
+            if (this.game.time.time < this.nextFire ||
+                this.getFirstExists(false) == null) { return; }
             
             if (this.sound) {this.sound.play(LaserSoundSprite.L1)};
 
@@ -67,7 +68,8 @@
 
         fire(source: Phaser.Sprite) {
 
-            if (this.game.time.time < this.nextFire) { return; }
+            if (this.game.time.time < this.nextFire ||
+                this.getFirstExists(false) == null) { return; }
 
             if (this.sound) {this.sound.play(LaserSoundSprite.L2)};
 
@@ -100,7 +102,8 @@
         }
 
         fire(source: Phaser.Sprite) {
-            if (this.game.time.time < this.nextFire) { return; }
+            if (this.game.time.time < this.nextFire ||
+                this.getFirstExists(false) == null) { return; }
 
             if (this.sound) {this.sound.play(LaserSoundSprite.L3)};
 
@@ -136,7 +139,8 @@
         }
 
         fire(source: Phaser.Sprite) {
-            if (this.game.time.time < this.nextFire) { return; }
+            if (this.game.time.time < this.nextFire ||
+                this.getFirstExists(false) == null) { return; }
 
             if (this.sound) {this.sound.play(LaserSoundSprite.L4)};
 
@@ -177,7 +181,8 @@
         }
 
         fire(source: Phaser.Sprite) {
-            if (this.game.time.time < this.nextFire) { return; }
+            if (this.game.time.time < this.nextFire ||
+                this.getFirstExists(false) == null) { return; }
 
             if (this.sound) {this.sound.play(LaserSoundSprite.L5)};
 
@@ -210,7 +215,8 @@
         }
 
         fire(source: Phaser.Sprite) {
-            if (this.game.time.time < this.nextFire) { return; }
+            if (this.game.time.time < this.nextFire ||
+                this.getFirstExists(false) == null) { return; }
 
             if (this.sound) {this.sound.play(LaserSoundSprite.L6)};
 
@@ -243,7 +249,8 @@
         }
 
         fire(source: Phaser.Sprite) {
-            if (this.game.time.time < this.nextFire) { return; }
+            if (this.game.time.time < this.nextFire ||
+                this.getFirstExists(false) == null) { return; }
 
             if (this.sound) {this.sound.play(LaserSoundSprite.L7)};
 
@@ -286,7 +293,8 @@
         }
 
         fire(source: Phaser.Sprite) {
-            if (this.game.time.time < this.nextFire) { return; }
+            if (this.game.time.time < this.nextFire ||
+                this.getFirstExists(false) == null) { return; }
 
             if (this.sound) {this.sound.play(LaserSoundSprite.L8)};            
 
@@ -328,7 +336,8 @@
         }
 
         fire(source: Phaser.Sprite) {
-            if (this.game.time.time < this.nextFire) { return; }
+            if (this.game.time.time < this.nextFire ||
+                this.getFirstExists(false) == null) { return; }
 
             if (this.sound) {this.sound.play(LaserSoundSprite.L9)};
 
@@ -364,7 +373,8 @@
         }
 
         fire(source: Phaser.Sprite) {
-            if (this.game.time.time < this.nextFire) { return; }
+            if (this.game.time.time < this.nextFire ||
+                this.getFirstExists(false) == null) { return; }
 
             var x = source.x + 10;
             var y = source.y + 10;

@@ -23,7 +23,8 @@ var SingleBullet = (function (_super) {
         }
     }
     SingleBullet.prototype.fire = function (source) {
-        if (this.game.time.time < this.nextFire) {
+        if (this.game.time.time < this.nextFire ||
+            this.getFirstExists(false) == null) {
             return;
         }
         if (this.sound) {
@@ -48,7 +49,8 @@ var FrontAndBack = (function (_super) {
         }
     }
     FrontAndBack.prototype.fire = function (source) {
-        if (this.game.time.time < this.nextFire) {
+        if (this.game.time.time < this.nextFire ||
+            this.getFirstExists(false) == null) {
             return;
         }
         if (this.sound) {
@@ -75,7 +77,8 @@ var ThreeWay = (function (_super) {
         }
     }
     ThreeWay.prototype.fire = function (source) {
-        if (this.game.time.time < this.nextFire) {
+        if (this.game.time.time < this.nextFire ||
+            this.getFirstExists(false) == null) {
             return;
         }
         if (this.sound) {
@@ -103,7 +106,8 @@ var EightWay = (function (_super) {
         }
     }
     EightWay.prototype.fire = function (source) {
-        if (this.game.time.time < this.nextFire) {
+        if (this.game.time.time < this.nextFire ||
+            this.getFirstExists(false) == null) {
             return;
         }
         if (this.sound) {
@@ -136,7 +140,8 @@ var ScatterShot = (function (_super) {
         }
     }
     ScatterShot.prototype.fire = function (source) {
-        if (this.game.time.time < this.nextFire) {
+        if (this.game.time.time < this.nextFire ||
+            this.getFirstExists(false) == null) {
             return;
         }
         if (this.sound) {
@@ -163,7 +168,8 @@ var Beam = (function (_super) {
         }
     }
     Beam.prototype.fire = function (source) {
-        if (this.game.time.time < this.nextFire) {
+        if (this.game.time.time < this.nextFire ||
+            this.getFirstExists(false) == null) {
             return;
         }
         if (this.sound) {
@@ -189,7 +195,8 @@ var SplitShot = (function (_super) {
         }
     }
     SplitShot.prototype.fire = function (source) {
-        if (this.game.time.time < this.nextFire) {
+        if (this.game.time.time < this.nextFire ||
+            this.getFirstExists(false) == null) {
             return;
         }
         if (this.sound) {
@@ -220,7 +227,8 @@ var Pattern = (function (_super) {
         }
     }
     Pattern.prototype.fire = function (source) {
-        if (this.game.time.time < this.nextFire) {
+        if (this.game.time.time < this.nextFire ||
+            this.getFirstExists(false) == null) {
             return;
         }
         if (this.sound) {
@@ -251,7 +259,8 @@ var Rockets = (function (_super) {
         this.setAll('tracking', true);
     }
     Rockets.prototype.fire = function (source) {
-        if (this.game.time.time < this.nextFire) {
+        if (this.game.time.time < this.nextFire ||
+            this.getFirstExists(false) == null) {
             return;
         }
         if (this.sound) {
@@ -279,7 +288,8 @@ var ScaleBullet = (function (_super) {
         this.setAll('scaleSpeed', 0.05);
     }
     ScaleBullet.prototype.fire = function (source) {
-        if (this.game.time.time < this.nextFire) {
+        if (this.game.time.time < this.nextFire ||
+            this.getFirstExists(false) == null) {
             return;
         }
         var x = source.x + 10;

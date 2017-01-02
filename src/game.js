@@ -1,5 +1,8 @@
 var Game = (function () {
     function Game() {
+        this.movingUp = false;
+        this.yLowerBound = 100;
+        this.yUpperBound = 800;
         this.game = new Phaser.Game(1280, 1024, Phaser.AUTO, 'content', { init: Game.init, preload: Game.preload, create: Game.create, update: Game.update });
         this.laserAudio = new LaserSoundSprite(this.game);
         this.effectAudio = new EffectsSoundSprite(this.game);
@@ -56,12 +59,17 @@ var Game = (function () {
         }
         self.player = self.game.add.sprite(64, 200, 'player');
         self.player.animations.add('kaboom');
-        self.alien = self.game.add.sprite(600, 200, 'alien');
-        self.alien.animations.add('fly', [0, 1, 2, 3], 20, true);
-        self.alien.animations.play('fly');
         self.game.physics.arcade.enable(self.player);
-        self.game.physics.arcade.enable(self.alien);
         self.player.body.collideWorldBounds = true;
+        self.aliens = self.game.add.group();
+        self.aliens.create(600, 200, 'alien');
+        self.aliens.create(800, 400, 'alien');
+        self.aliens.create(600, 600, 'alien');
+        self.aliens.forEach(function (alien) {
+            alien.animations.add('fly', [0, 1, 2, 3], 20, true);
+            alien.animations.play('fly');
+            self.game.physics.arcade.enable(alien);
+        }, self);
         self.foreground = self.game.add.tileSprite(0, 0, self.game.width, self.game.height, 'foreground');
         self.foreground.autoScroll(-60, 0);
         self.weaponName = self.game.add.bitmapText(8, 900, 'shmupfont', "ENTER = Next Weapon", 24);
@@ -88,12 +96,30 @@ var Game = (function () {
         if (self.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
             self.weapons[self.currentWeapon].fire(self.player);
         }
-        if (self.game.physics.arcade.collide(self.alien, self.player)) {
-            Game.playerHitsAlien(self.alien, self.player);
-        }
-        self.game.physics.arcade.collide(self.weapons[self.currentWeapon], self.alien, function (bullet, alien) {
+        self.game.physics.arcade.collide(self.aliens, self.player, function (alien, player) {
+            Game.playerHitsAlien(alien, player);
+        });
+        self.game.physics.arcade.collide(self.weapons[self.currentWeapon], self.aliens, function (bullet, alien) {
             self.bulletHitsAlien(bullet, alien);
         });
+        self.moveAliens();
+    };
+    Game.prototype.moveAliens = function () {
+        var self = Game.instance;
+        self.aliens.forEach(function (alien) {
+            if (self.movingUp) {
+                alien.y += 2;
+                if (alien.y > self.yUpperBound) {
+                    self.movingUp = false;
+                }
+            }
+            else {
+                alien.y -= 2;
+                if (alien.y < self.yLowerBound) {
+                    self.movingUp = true;
+                }
+            }
+        }, self);
     };
     Game.prototype.nextWeapon = function () {
         console.log('Changing weapon.');
@@ -132,7 +158,7 @@ var Game = (function () {
         fireyDeath.anchor.setTo(0.5, 0.5);
         fireyDeath.animations.add('boom');
         fireyDeath.play('boom', 15, false, true);
-        self.effectAudio.play(EffectsSoundSprite.DEATH);
+        self.effectAudio.play(EffectsSoundSprite.ALIEN_DEATH);
     };
     return Game;
 }());
