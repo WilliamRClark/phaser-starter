@@ -1,8 +1,5 @@
 var Game = (function () {
     function Game() {
-        this.movingUp = false;
-        this.yLowerBound = 100;
-        this.yUpperBound = 800;
         this.game = new Phaser.Game(1280, 1024, Phaser.AUTO, 'content', { init: Game.init, preload: Game.preload, create: Game.create, update: Game.update });
         this.laserAudio = new LaserSoundSprite(this.game);
         this.effectAudio = new EffectsSoundSprite(this.game);
@@ -61,17 +58,9 @@ var Game = (function () {
         self.player.animations.add('kaboom');
         self.game.physics.arcade.enable(self.player);
         self.player.body.collideWorldBounds = true;
-        self.aliens = self.game.add.group();
-        self.aliens.create(600, 200, 'alien');
-        self.aliens.create(800, 400, 'alien');
-        self.aliens.create(600, 600, 'alien');
-        self.aliens.forEach(function (alien) {
-            alien.animations.add('fly', [0, 1, 2, 3], 20, true);
-            alien.animations.play('fly');
-            self.game.physics.arcade.enable(alien);
-        }, self);
+        self.wave1 = new AlienWave(self.game);
         self.foreground = self.game.add.tileSprite(0, 0, self.game.width, self.game.height, 'foreground');
-        self.foreground.autoScroll(-60, 0);
+        self.foreground.autoScroll(-120, 0);
         self.weaponName = self.game.add.bitmapText(8, 900, 'shmupfont', "ENTER = Next Weapon", 24);
         self.cursors = self.game.input.keyboard.createCursorKeys();
         self.game.input.keyboard.addKeyCapture([Phaser.Keyboard.SPACEBAR]);
@@ -96,30 +85,13 @@ var Game = (function () {
         if (self.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
             self.weapons[self.currentWeapon].fire(self.player);
         }
-        self.game.physics.arcade.collide(self.aliens, self.player, function (alien, player) {
+        self.game.physics.arcade.collide(self.wave1.aliens, self.player, function (alien, player) {
             Game.playerHitsAlien(alien, player);
         });
-        self.game.physics.arcade.collide(self.weapons[self.currentWeapon], self.aliens, function (bullet, alien) {
+        self.game.physics.arcade.collide(self.weapons[self.currentWeapon], self.wave1.aliens, function (bullet, alien) {
             self.bulletHitsAlien(bullet, alien);
         });
-        self.moveAliens();
-    };
-    Game.prototype.moveAliens = function () {
-        var self = Game.instance;
-        self.aliens.forEach(function (alien) {
-            if (self.movingUp) {
-                alien.y += 2;
-                if (alien.y > self.yUpperBound) {
-                    self.movingUp = false;
-                }
-            }
-            else {
-                alien.y -= 2;
-                if (alien.y < self.yLowerBound) {
-                    self.movingUp = true;
-                }
-            }
-        }, self);
+        self.wave1.moveAliens();
     };
     Game.prototype.nextWeapon = function () {
         console.log('Changing weapon.');

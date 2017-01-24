@@ -20,6 +20,7 @@
         private currentWeapon: number;
         private player: Phaser.Sprite;
         private aliens: Phaser.Group;
+        private wave1: AlienWave;
 
         private weaponName: Phaser.BitmapText;
         private cursors: Phaser.CursorKeys;
@@ -125,21 +126,11 @@
             self.game.physics.arcade.enable(self.player);
             self.player.body.collideWorldBounds = true;
 
-            self.aliens = self.game.add.group();
-            self.aliens.create(600, 200, 'alien');
-            self.aliens.create(800, 400, 'alien');
-            self.aliens.create(600, 600, 'alien');
-
-            self.aliens.forEach(function(alien: Phaser.Sprite) {
-                alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
-                alien.animations.play('fly');
-                self.game.physics.arcade.enable(alien);
-            }, self);
-
+            self.wave1 = new AlienWave(self.game);
 
             // Set up our foreground image.
             self.foreground = self.game.add.tileSprite(0, 0, self.game.width, self.game.height, 'foreground');
-            self.foreground.autoScroll(-60, 0);
+            self.foreground.autoScroll(-120, 0);
 
             self.weaponName = self.game.add.bitmapText(8, 900, 'shmupfont', "ENTER = Next Weapon", 24);
 
@@ -187,7 +178,7 @@
 
             //  Run collision detection
             self.game.physics.arcade.collide(
-                self.aliens, 
+                self.wave1.aliens, 
                 self.player, 
                 function(alien: Phaser.Sprite, player: Phaser.Sprite){
                     Game.playerHitsAlien(alien, player);
@@ -197,36 +188,15 @@
 
             self.game.physics.arcade.collide(
                 self.weapons[self.currentWeapon], 
-                self.aliens, 
+                self.wave1.aliens, 
                 function(bullet: Phaser.Sprite, alien: Phaser.Sprite) {
                     self.bulletHitsAlien(bullet, alien);
                 } 
             );
 
-            self.moveAliens();
+            self.wave1.moveAliens();
         }
 
-        private movingUp : boolean = false;
-        private yLowerBound : number = 100;
-        private yUpperBound : number = 800;
-
-        moveAliens() {
-            var self : Game = Game.instance;
-            self.aliens.forEach(function(alien: Phaser.Group) {
-                if (self.movingUp) {
-                    alien.y += 2;
-                    if (alien.y > self.yUpperBound) {
-                        self.movingUp = false;
-                    }
-                } else {
-                    alien.y -= 2;
-                    if (alien.y < self.yLowerBound) {
-                        self.movingUp = true;
-                    }
-                }
-            }, self);
-
-        }
 
         /**
          * Change the active weapon used by the player.
