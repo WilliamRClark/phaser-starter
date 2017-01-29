@@ -14,6 +14,7 @@ var Game = (function () {
     Game.preload = function () {
         console.log("Phaser preload()");
         var self = Game.instance;
+        self.game.load.json('CirclePath10', 'assets/data/CirclePath10.json');
         self.game.load.image('background', 'assets/images/back.png');
         self.game.load.image('foreground', 'assets/images/fore.png');
         self.game.load.image('player', 'assets/images/ship.png');

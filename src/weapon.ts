@@ -435,16 +435,17 @@
         private weapon2: Weapon;
         private weapon3: Weapon;
         private name: string;
+        private sound: LaserSoundSprite;
 
         constructor(game: Phaser.Game, sound: LaserSoundSprite) {
             this.name = "Combo Two";
             this.weapon1 = new Pattern(game, null);
             this.weapon2 = new ThreeWay(game, null);
             this.weapon3 = new Rockets(game, null);
+            this.sound = sound;
         }
 
         reset() {
-
             this.weapon1.visible = false;
             this.weapon1.callAll('reset', null, 0, 0);
             this.weapon1.setAll('exists', false);
@@ -460,6 +461,11 @@
         }
 
         fire(source: Phaser.Sprite) {
+            if (this.sound) {
+                this.sound.play(LaserSoundSprite.L1);
+                this.sound.play(LaserSoundSprite.L2);
+                this.sound.play(LaserSoundSprite.L3);
+            }
             this.weapon1.fire(source);
             this.weapon2.fire(source);
             this.weapon3.fire(source);

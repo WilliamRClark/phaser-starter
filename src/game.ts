@@ -60,6 +60,9 @@
             console.log("Phaser preload()");
             var self : Game = Game.instance;
 
+            // Data / Path assets.
+            self.game.load.json('CirclePath10', 'assets/data/CirclePath10.json');
+
             // Image assets
             self.game.load.image('background', 'assets/images/back.png');
             self.game.load.image('foreground', 'assets/images/fore.png');

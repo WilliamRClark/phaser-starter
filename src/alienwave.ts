@@ -1,37 +1,42 @@
 class Alien extends Phaser.Sprite {
-    private movingUp : boolean = false;
-    private movingRight: boolean = true;
-    private readonly h : number;
-    private readonly k : number;
-    private readonly r : number = 50;
-    private readonly speed : number = 2;
+    /**
+     * Create a sprite and add it to the parent group. 
+     */    
+    public static create(game: Phaser.Game, group: Phaser.Group, x: number, y: number) : Alien {
+        var newAlien : Alien = new Alien(game, x, y);
+        group.add(newAlien);
 
-    constructor(game: Phaser.Game, x: number, y: number, key?: string | Phaser.RenderTexture | Phaser.BitmapData | PIXI.Texture, frame?: string | number) {
-        super(game, x, y);
+        return newAlien;
+    }
+
+    // Parent group for this sprite.  Used for collision detection.
+    private group: Phaser.Group;
+
+    // Json Map of X - Y locations 
+    private static pathMap;
+
+    // Reference to the current location in the path map.
+    private pathLocation : number = 0;
+
+    private constructor(game: Phaser.Game, x: number, y: number) {
+        super(game,x, y, 'alien');
+        this.animations.add('fly', [0, 1, 2, 3], 20, true);
+        this.animations.play('fly');
+        game.physics.arcade.enable(this);
+
+        Alien.pathMap = game.cache.getJSON('CirclePath10');
     }
 
     public move() {
-        // y=sqrt(r^2-(x-h)^2)+k 
-        if (this.movingRight) {
-            this.x += this.speed;
-            if (this.x > (this.h + this.r)) {
-                this.movingRight = false;
-                this.movingUp = !this.movingUp;
-            }
-        } else {
-            this.x -= this.speed;
-            if (this.x < (this.h - this.r)) {
-                this.movingRight = true;
-                this.movingUp = !this.movingUp;
-            }                
-        }
+        // Simple movement based off of path map.
+        this.x += Alien.pathMap[this.pathLocation].X;
+        this.y += Alien.pathMap[this.pathLocation].Y;
 
-        if (this.movingUp) {
-            this.y = Math.sqrt((this.r*this.r)-(this.x- this.h)*(this.x- this.h)) + this.k;
-        } else {
-            this.y = -1 * Math.sqrt((this.r*this.r)-(this.x- this.h)*(this.x- this.h)) + this.k;
+        // Go to the next location in the path map.
+        this.pathLocation++;
+        if (Alien.pathMap[this.pathLocation] == undefined) {
+            this.pathLocation = 0;
         }
-
     }
 
 }
@@ -50,24 +55,12 @@ class AlienWave {
     constructor(game: Phaser.Game) {
         var self : AlienWave = this;
         this.aliens = game.add.group();
-        this.aliens.create(200, 400, 'alien');
-        this.aliens.create(800, 400, 'alien');
-        //self.aliens.create(600, 600, 'alien');
-        this.aliens.forEach(function (alien) {
-            alien.animations.add('fly', [0, 1, 2, 3], 20, true);
-            alien.animations.play('fly');
-            game.physics.arcade.enable(alien);
-        }, self);
-
-        //this.aliens = game.add.group();
-        //this.aliens.add(new Alien(game, 500, 200, 'alien'));
-        //this.aliens.add(new Alien(game, 600, 500, 'alien'));
-
-        //this.aliens.forEach(function(alien: Alien) {
-        //    alien.animations.add('fly', [ 0, 1, 2, 3 ], 20, true);
-        //    alien.animations.play('fly');
-        //    game.physics.arcade.enable(alien);
-        //}, this);
+        Alien.create(game, this.aliens, 100, 100);
+        Alien.create(game, this.aliens, 200, 400);
+        Alien.create(game, this.aliens, 200, 300);
+        Alien.create(game, this.aliens, 400, 100);
+        Alien.create(game, this.aliens, 400, 800);
+        Alien.create(game, this.aliens, 100, 400);
     }
 
     public moveAliens() {
@@ -78,7 +71,14 @@ class AlienWave {
             if (alien.alive == false) {
                 return;
             }
-            
+
+            alien.move();
+
+            // Simple movement.  Brutally slow.
+
+            //alien.x += 2 * Math.random();
+            //alien.y += 2 * Math.random();
+                        
             // y=sqrt(r^2-(x-h)^2)+k 
             /*if (this.movingRight) {
                 alien.x += this.speed;
@@ -100,6 +100,7 @@ class AlienWave {
                 alien.y = -1 * Math.sqrt((this.r*this.r)-(alien.x- this.h)*(alien.x- this.h)) + this.k;
             }
             */
+            
             console.log("Position: " + alien.x + " " + alien.y);
 
             // End loop

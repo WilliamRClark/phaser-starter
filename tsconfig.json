@@ -15,6 +15,7 @@
 		"typings/index.d.ts",
         "src/game.ts",
         "src/bullets.ts",
-        "src/weapon.ts"
+        "src/weapon.ts",
+        "src/alienwave.ts"
 	]
 }

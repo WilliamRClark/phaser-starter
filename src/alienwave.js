@@ -5,33 +5,25 @@ var __extends = (this && this.__extends) || function (d, b) {
 };
 var Alien = (function (_super) {
     __extends(Alien, _super);
-    function Alien(game, x, y, key, frame) {
-        _super.call(this, game, x, y);
-        this.movingUp = false;
-        this.movingRight = true;
-        this.r = 50;
-        this.speed = 2;
+    function Alien(game, x, y) {
+        _super.call(this, game, x, y, 'alien');
+        this.pathLocation = 0;
+        this.animations.add('fly', [0, 1, 2, 3], 20, true);
+        this.animations.play('fly');
+        game.physics.arcade.enable(this);
+        Alien.pathMap = game.cache.getJSON('CirclePath10');
     }
+    Alien.create = function (game, group, x, y) {
+        var newAlien = new Alien(game, x, y);
+        group.add(newAlien);
+        return newAlien;
+    };
     Alien.prototype.move = function () {
-        if (this.movingRight) {
-            this.x += this.speed;
-            if (this.x > (this.h + this.r)) {
-                this.movingRight = false;
-                this.movingUp = !this.movingUp;
-            }
-        }
-        else {
-            this.x -= this.speed;
-            if (this.x < (this.h - this.r)) {
-                this.movingRight = true;
-                this.movingUp = !this.movingUp;
-            }
-        }
-        if (this.movingUp) {
-            this.y = Math.sqrt((this.r * this.r) - (this.x - this.h) * (this.x - this.h)) + this.k;
-        }
-        else {
-            this.y = -1 * Math.sqrt((this.r * this.r) - (this.x - this.h) * (this.x - this.h)) + this.k;
+        this.x += Alien.pathMap[this.pathLocation].X;
+        this.y += Alien.pathMap[this.pathLocation].Y;
+        this.pathLocation++;
+        if (Alien.pathMap[this.pathLocation] == undefined) {
+            this.pathLocation = 0;
         }
     };
     return Alien;
@@ -48,19 +40,19 @@ var AlienWave = (function () {
         this.speed = 2;
         var self = this;
         this.aliens = game.add.group();
-        this.aliens.create(200, 400, 'alien');
-        this.aliens.create(800, 400, 'alien');
-        this.aliens.forEach(function (alien) {
-            alien.animations.add('fly', [0, 1, 2, 3], 20, true);
-            alien.animations.play('fly');
-            game.physics.arcade.enable(alien);
-        }, self);
+        Alien.create(game, this.aliens, 100, 100);
+        Alien.create(game, this.aliens, 200, 400);
+        Alien.create(game, this.aliens, 200, 300);
+        Alien.create(game, this.aliens, 400, 100);
+        Alien.create(game, this.aliens, 400, 800);
+        Alien.create(game, this.aliens, 100, 400);
     }
     AlienWave.prototype.moveAliens = function () {
         this.aliens.forEach(function (alien) {
             if (alien.alive == false) {
                 return;
             }
+            alien.move();
             console.log("Position: " + alien.x + " " + alien.y);
         }, this);
     };

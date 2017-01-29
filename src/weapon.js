@@ -327,6 +327,7 @@ var Combo2 = (function () {
         this.weapon1 = new Pattern(game, null);
         this.weapon2 = new ThreeWay(game, null);
         this.weapon3 = new Rockets(game, null);
+        this.sound = sound;
     }
     Combo2.prototype.reset = function () {
         this.weapon1.visible = false;
@@ -340,6 +341,11 @@ var Combo2 = (function () {
         this.weapon3.setAll('exists', false);
     };
     Combo2.prototype.fire = function (source) {
+        if (this.sound) {
+            this.sound.play(LaserSoundSprite.L1);
+            this.sound.play(LaserSoundSprite.L2);
+            this.sound.play(LaserSoundSprite.L3);
+        }
         this.weapon1.fire(source);
         this.weapon2.fire(source);
         this.weapon3.fire(source);
