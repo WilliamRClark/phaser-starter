@@ -66,7 +66,7 @@
             // Image assets
             self.game.load.image('background', 'assets/images/back.png');
             self.game.load.image('foreground', 'assets/images/fore.png');
-            self.game.load.image('player', 'assets/images/ship.png');
+            self.game.load.image('player', 'assets/images/FighterBlue.png');
             self.game.load.spritesheet('kaboom', 'assets/images/explode.png', 128, 128);
             self.game.load.spritesheet('alien', 'assets/images/invader32x32x4.png', 32, 32);
 
@@ -127,6 +127,10 @@
             self.player = self.game.add.sprite(64, 200, 'player');
             self.player.animations.add('kaboom');
             self.game.physics.arcade.enable(self.player);
+            self.game.physics.arcade.checkCollision.down = true;
+            self.game.physics.arcade.checkCollision.up = true;
+            self.game.physics.arcade.checkCollision.left = true;
+            self.game.physics.arcade.checkCollision.right = true;
             self.player.body.collideWorldBounds = true;
 
             self.wave1 = new AlienWave(self.game);
@@ -154,7 +158,7 @@
         static update() {
             var self : Game = Game.instance;
             self.player.body.velocity.set(0);
-
+            
             // Process keyboard
             if (self.cursors.left.isDown)
             {
@@ -180,7 +184,7 @@
             }
 
             //  Run collision detection
-            self.game.physics.arcade.collide(
+            self.game.physics.arcade.overlap(
                 self.wave1.aliens, 
                 self.player, 
                 function(alien: Phaser.Sprite, player: Phaser.Sprite){

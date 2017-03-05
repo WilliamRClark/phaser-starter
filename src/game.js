@@ -17,7 +17,7 @@ var Game = (function () {
         self.game.load.json('CirclePath10', 'assets/data/CirclePath10.json');
         self.game.load.image('background', 'assets/images/back.png');
         self.game.load.image('foreground', 'assets/images/fore.png');
-        self.game.load.image('player', 'assets/images/ship.png');
+        self.game.load.image('player', 'assets/images/FighterBlue.png');
         self.game.load.spritesheet('kaboom', 'assets/images/explode.png', 128, 128);
         self.game.load.spritesheet('alien', 'assets/images/invader32x32x4.png', 32, 32);
         for (var i = 1; i <= 11; i++) {
@@ -58,6 +58,10 @@ var Game = (function () {
         self.player = self.game.add.sprite(64, 200, 'player');
         self.player.animations.add('kaboom');
         self.game.physics.arcade.enable(self.player);
+        self.game.physics.arcade.checkCollision.down = true;
+        self.game.physics.arcade.checkCollision.up = true;
+        self.game.physics.arcade.checkCollision.left = true;
+        self.game.physics.arcade.checkCollision.right = true;
         self.player.body.collideWorldBounds = true;
         self.wave1 = new AlienWave(self.game);
         self.foreground = self.game.add.tileSprite(0, 0, self.game.width, self.game.height, 'foreground');
@@ -86,7 +90,7 @@ var Game = (function () {
         if (self.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR)) {
             self.weapons[self.currentWeapon].fire(self.player);
         }
-        self.game.physics.arcade.collide(self.wave1.aliens, self.player, function (alien, player) {
+        self.game.physics.arcade.overlap(self.wave1.aliens, self.player, function (alien, player) {
             Game.playerHitsAlien(alien, player);
         });
         self.game.physics.arcade.collide(self.weapons[self.currentWeapon], self.wave1.aliens, function (bullet, alien) {
