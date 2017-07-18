@@ -15,11 +15,18 @@ class Alien extends Phaser.Sprite {
     // Json Map of X - Y locations 
     private static pathMap;
 
+    // Reference to start location
+    private xOrigin : number;
+    private yOrigin : number;
+    private currentAngle : number = 0;
+
     // Reference to the current location in the path map.
     private pathLocation : number = 0;
 
     private constructor(game: Phaser.Game, x: number, y: number) {
         super(game,x, y, 'alien');
+        this.xOrigin = x;
+        this.yOrigin = y;
         this.animations.add('fly', [0, 1, 2, 3], 20, true);
         this.animations.play('fly');
         game.physics.arcade.enable(this);
@@ -27,6 +34,19 @@ class Alien extends Phaser.Sprite {
         Alien.pathMap = game.cache.getJSON('CirclePath10');
     }
 
+
+   /** 
+    public move() {
+        this.x = this.xOrigin + 10 * Math.cos(this.currentAngle * (Math.PI / 180));
+        this.y = this.yOrigin + 10 * Math.sin(this.currentAngle * (Math.PI / 180));        
+        //console.log("a:" + this.currentAngle + " " + 10 * Math.cos(this.currentAngle * (Math.PI/180)) + " " + 10 * Math.sin(this.currentAngle * (Math.PI/180)));
+        this.currentAngle += 2;
+        if (this.currentAngle > 360) {
+            this.currentAngle = 0;
+        }
+    }*/
+    
+    
     public move() {
         // Simple movement based off of path map.
         this.x += Alien.pathMap[this.pathLocation].X;
@@ -38,7 +58,6 @@ class Alien extends Phaser.Sprite {
             this.pathLocation = 0;
         }
     }
-
 }
 
 class AlienWave {

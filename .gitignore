@@ -14,3 +14,4 @@ Phaser.sublime-workspace
 
 # Vendors
 node_modules/
+bin/*.js

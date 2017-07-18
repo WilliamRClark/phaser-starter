@@ -6,16 +6,12 @@
         "declaration": false,
         "noImplicitAny": false,
         "removeComments": true,
-        "noLib": false
+        "noLib": false,
+        "outDir": "bin",
+        "rootDir": "src"
     },
-    "filesGlob": [
-        "src/**/*.ts"
-    ],
-	"files": [
-		"typings/index.d.ts",
-        "src/game.ts",
-        "src/bullets.ts",
-        "src/weapon.ts",
-        "src/alienwave.ts"
-	]
+    "include": [
+        "typings/index.d.ts",
+        "src/*.ts"
+    ]
 }

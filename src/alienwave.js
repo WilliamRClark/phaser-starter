@@ -7,7 +7,10 @@ var Alien = (function (_super) {
     __extends(Alien, _super);
     function Alien(game, x, y) {
         _super.call(this, game, x, y, 'alien');
+        this.currentAngle = 0;
         this.pathLocation = 0;
+        this.xOrigin = x;
+        this.yOrigin = y;
         this.animations.add('fly', [0, 1, 2, 3], 20, true);
         this.animations.play('fly');
         game.physics.arcade.enable(this);
