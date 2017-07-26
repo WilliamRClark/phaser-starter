@@ -26,6 +26,12 @@
         private cursors: Phaser.CursorKeys;
         private speed: number;
         private explosions : Phaser.Group;
+        private stateText: Phaser.Text;
+
+        /**
+         * Has the player died...
+         */
+        private gameOver: boolean = false;
 
 
         /**
@@ -61,22 +67,22 @@
             var self : Game = Game.instance;
 
             // Data / Path assets.
-            self.game.load.json('CirclePath10', 'assets/data/CirclePath10.json');
+            self.game.load.json('CirclePath10', './assets/data/CirclePath10.json');
 
             // Image assets
-            self.game.load.image('background', 'assets/images/back.png');
-            self.game.load.image('foreground', 'assets/images/fore.png');
-            self.game.load.image('player', 'assets/images/FighterBlue.png');
-            self.game.load.spritesheet('kaboom', 'assets/images/explode.png', 128, 128);
-            self.game.load.spritesheet('alien', 'assets/images/invader32x32x4.png', 32, 32);
+            self.game.load.image('background', './assets/images/back.png');
+            self.game.load.image('foreground', './assets/images/fore.png');
+            self.game.load.image('player', './assets/images/FighterBlue.png');
+            self.game.load.spritesheet('kaboom', './assets/images/explode.png', 128, 128);
+            self.game.load.spritesheet('alien', './assets/images/invader32x32x4.png', 32, 32);
 
             for (var i = 1; i <= 11; i++)
             {
-                self.game.load.image('bullet' + i, 'assets/images/bullet' + i + '.png');
+                self.game.load.image('bullet' + i, './assets/images/bullet' + i + '.png');
             }
 
             // Font assets
-            self.game.load.bitmapFont('shmupfont', 'assets/images/shmupfont.png', 'assets/shmupfont.xml');
+            self.game.load.bitmapFont('shmupfont', './assets/images/shmupfont.png', './assets/shmupfont.xml');
 
             // Audio assets
             self.laserAudio.preload();
@@ -141,6 +147,11 @@
 
             self.weaponName = self.game.add.bitmapText(8, 900, 'shmupfont', "ENTER = Next Weapon", 24);
 
+            //  Text
+            self.stateText = self.game.add.text(self.game.world.centerX, self.game.world.centerY,' ', { font: '84px Arial', fill: '#fff' });
+            self.stateText.anchor.setTo(0.5, 0.5);
+            self.stateText.visible = false;
+            
             //  Cursor keys to fly + space to fire
             self.cursors = self.game.input.keyboard.createCursorKeys();
 
@@ -159,28 +170,31 @@
             var self : Game = Game.instance;
             self.player.body.velocity.set(0);
             
-            // Process keyboard
-            if (self.cursors.left.isDown)
-            {
-                self.player.body.velocity.x = -self.speed;
-            }
-            else if (self.cursors.right.isDown)
-            {
-                self.player.body.velocity.x = self.speed;
-            }
+            // Process keyboard (if you aren't dead)
+            if (self.gameOver == false) {
+                if (self.cursors.left.isDown)
+                {
+                    self.player.body.velocity.x = -self.speed;
+                }
+                else if (self.cursors.right.isDown)
+                {
+                    self.player.body.velocity.x = self.speed;
+                }
 
-            if (self.cursors.up.isDown)
-            {
-                self.player.body.velocity.y = -self.speed;
-            }
-            else if (self.cursors.down.isDown)
-            {
-                self.player.body.velocity.y = self.speed;
-            }
+                if (self.cursors.up.isDown)
+                {
+                    self.player.body.velocity.y = -self.speed;
+                }
+                else if (self.cursors.down.isDown)
+                {
+                    self.player.body.velocity.y = self.speed;
+                }
 
-            if (self.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
-            {
-                self.weapons[self.currentWeapon].fire(self.player);
+                if (self.game.input.keyboard.isDown(Phaser.Keyboard.SPACEBAR))
+                {
+                    self.weapons[self.currentWeapon].fire(self.player);
+                }
+
             }
 
             //  Run collision detection
@@ -262,6 +276,11 @@
             alien.kill();
 
             Game.fireyDeath(player);
+
+            self.stateText.text = "GAME OVER !!!";
+            self.stateText.visible = true;
+            self.gameOver = true;         
+
         }
 
         static fireyDeath(dyingSprite: Phaser.Sprite) {
@@ -274,7 +293,7 @@
             fireyDeath.play('boom', 15, false, true);
 
             // Make dying sounds
-            self.effectAudio.play(EffectsSoundSprite.ALIEN_DEATH);            
+            self.effectAudio.play(EffectsSoundSprite.ALIEN_DEATH);  
         }
     }
 
