@@ -33,20 +33,7 @@ class Alien extends Phaser.Sprite {
 
         Alien.pathMap = game.cache.getJSON('CirclePath10');
     }
-
-
-   /** 
-    public move() {
-        this.x = this.xOrigin + 10 * Math.cos(this.currentAngle * (Math.PI / 180));
-        this.y = this.yOrigin + 10 * Math.sin(this.currentAngle * (Math.PI / 180));        
-        //console.log("a:" + this.currentAngle + " " + 10 * Math.cos(this.currentAngle * (Math.PI/180)) + " " + 10 * Math.sin(this.currentAngle * (Math.PI/180)));
-        this.currentAngle += 2;
-        if (this.currentAngle > 360) {
-            this.currentAngle = 0;
-        }
-    }*/
-    
-    
+        
     public move() {
         // Simple movement based off of path map.
         this.x += Alien.pathMap[this.pathLocation].X;
@@ -93,38 +80,14 @@ class AlienWave {
 
             alien.move();
 
-            // Simple movement.  Brutally slow.
-
-            //alien.x += 2 * Math.random();
-            //alien.y += 2 * Math.random();
-                        
-            // y=sqrt(r^2-(x-h)^2)+k 
-            /*if (this.movingRight) {
-                alien.x += this.speed;
-                if (alien.x > (this.h + this.r)) {
-                    this.movingRight = false;
-                    this.movingUp = !this.movingUp;
-                }
-            } else {
-                this.x -= this.speed;
-                if (alien.x < (this.h - this.r)) {
-                    this.movingRight = true;
-                    this.movingUp = !this.movingUp;
-                }                
-            }
-
-            if (this.movingUp) {
-                alien.y = Math.sqrt((this.r*this.r)-(alien.x- this.h)*(alien.x- this.h)) + this.k;
-            } else {
-                alien.y = -1 * Math.sqrt((this.r*this.r)-(alien.x- this.h)*(alien.x- this.h)) + this.k;
-            }
-            */
-            
-            console.log("Position: " + alien.x + " " + alien.y);
-
-            // End loop
-
         }, this);
+    }
+
+    /**
+     * Are all of the aliens in the wave dead.
+     */
+    public allDead() : boolean {
+        return (this.aliens.countLiving() < 1);
     }
 
 };

@@ -20,7 +20,7 @@
         private currentWeapon: number;
         private player: Phaser.Sprite;
         private aliens: Phaser.Group;
-        private wave1: AlienWave;
+        private currentAlienWave: AlienWave;
 
         private weaponName: Phaser.BitmapText;
         private cursors: Phaser.CursorKeys;
@@ -139,7 +139,7 @@
             self.game.physics.arcade.checkCollision.right = true;
             self.player.body.collideWorldBounds = true;
 
-            self.wave1 = new AlienWave(self.game);
+            self.currentAlienWave = new AlienWave(self.game);
 
             // Set up our foreground image.
             self.foreground = self.game.add.tileSprite(0, 0, self.game.width, self.game.height, 'foreground');
@@ -199,7 +199,7 @@
 
             //  Run collision detection
             self.game.physics.arcade.overlap(
-                self.wave1.aliens, 
+                self.currentAlienWave.aliens, 
                 self.player, 
                 function(alien: Phaser.Sprite, player: Phaser.Sprite){
                     Game.playerHitsAlien(alien, player);
@@ -209,13 +209,13 @@
 
             self.game.physics.arcade.collide(
                 self.weapons[self.currentWeapon], 
-                self.wave1.aliens, 
+                self.currentAlienWave.aliens, 
                 function(bullet: Phaser.Sprite, alien: Phaser.Sprite) {
                     self.bulletHitsAlien(bullet, alien);
                 } 
             );
 
-            self.wave1.moveAliens();
+            self.currentAlienWave.moveAliens();
         }
 
 
@@ -266,8 +266,20 @@
             alien.kill();
 
             Game.fireyDeath(alien);
+
+            if (self.currentAlienWave.allDead() == true) {
+                self.stateText.text = "TOTAL VICTORY !!!";
+                self.stateText.visible = true;
+                self.gameOver = true;         
+            }
         }
 
+        /**
+         * The player collides with an alien.  (Bad stuff happens.)
+         * 
+         * @param player our Hero
+         * @param alien what he ran into
+         */
         static playerHitsAlien(player: Phaser.Sprite, alien: Phaser.Sprite) {
             var self : Game = Game.instance;
 
@@ -283,6 +295,13 @@
 
         }
 
+        /**
+         * A player, or an alien has just blown up.  Play morose
+         * dying animation and effects.  
+         * 
+         * @param dyingSprite Either a player, or an alien.  Whoever just
+         * bit the dust.
+         */
         static fireyDeath(dyingSprite: Phaser.Sprite) {
             var self : Game = Game.instance;
 
