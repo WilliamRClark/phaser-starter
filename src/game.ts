@@ -87,6 +87,7 @@
             // Audio assets
             self.laserAudio.preload();
             self.effectAudio.preload();
+            self.game.load.audio("GameOver", "assets/sounds/Nevermore.mp3");
 
             //  An explosion pool
             self.explosions = self.game.add.group();
@@ -292,6 +293,9 @@
             self.stateText.text = "GAME OVER !!!";
             self.stateText.visible = true;
             self.gameOver = true;         
+
+            var music = self.game.add.audio("GameOver");
+            music.play();
 
         }
 
